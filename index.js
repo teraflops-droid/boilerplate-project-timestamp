@@ -36,14 +36,13 @@ app.get("/api/hello", function (req, res) {
 // A request to /api/:date?
 app.get('/api/:date', (req, res) => {
   let {date} = req.params;
-  let utcString = new Date(date).toUTCString(); 
   dateTime = new Date(date)
   // 👇️ timestamp in seconds (Unix timestamp)
   const timestampInSeconds = Math.floor(dateTime.getTime());
-  if(date.includes("-")) return  res.send({unix: timestampInSeconds,utc: utcString});
+  if(date.includes("-")) return  res.send({unix: timestampInSeconds,utc: new Date(date).toUTCString()});
   else{
     console.log("unix: " + date);
-    res.send({unix: date , utc: new Date(date * 1).toUTCString()})
+    res.json({unix: date , utc: new Date(date * 1).toUTCString()})
   }
 
 })
