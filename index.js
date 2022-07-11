@@ -42,7 +42,8 @@ app.get('/api/:date', (req, res) => {
   const timestampInSeconds = Math.floor(dateTime.getTime());
   if(date.includes("-")) return  res.send({unix: timestampInSeconds,utc: utcString});
   else{
-    res.send({unix: date , utc:new Date(date * 1000).toUTCString()})
+    console.log("unix: " + date);
+    res.send({unix: date , utc: new Date(date * 1).toUTCString()})
   }
 
 })
