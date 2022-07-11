@@ -35,17 +35,32 @@ app.get("/api/hello", function (req, res) {
 
 // A request to /api/:date?
 app.get('/api/:date', (req, res) => {
-  let {date} = req.params;
-  dateTime = new Date(date)
-  // 👇️ timestamp in seconds (Unix timestamp)
-  const timestampInSeconds = Math.floor(dateTime.getTime());
-  if(date.includes("-")) return  res.send({unix: timestampInSeconds,utc: new Date(date).toUTCString()});
-  else{
-    console.log("unix: " + date);
-    res.json({unix: date , utc: new Date(date * 1).toUTCString()})
+  const dateString =  req.params.date;
+  let date;
+  let unixData;
+
+
+  //Check if dateString === null, will assign current date
+  //Else check if dateString is an integer, if true will convert string to integer
+  if(!dateString) {
+    date = new Date();
+  } else {
+    if(!isNaN(dateString)) {
+      date = new Date((parseInt(dateString)) * 1);
+      unixData = dateString;
+    } else {
+      date = new Date(dateString)
+      unixData = date.getTime();
+    }
   }
 
-})
+  if(date.toString === "Invalid Date") {
+    res.json({error: date.toString});
+  } else {
+    res.json({unix: unixData, utc: date.toUTCString()})
+  }
+
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
