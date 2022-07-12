@@ -47,20 +47,24 @@ app.get('/api/:date', (req, res) => {
   } else {
     if(!isNaN(dateString)) {
       date = new Date((parseInt(dateString)) * 1);
-      unixData = dateString;
+      unixData = date.valueOf();
     } else {
       date = new Date(dateString)
       unixData = date.getTime();
     }
   }
-
-  if(date.toString === "Invalid Date") {
-    res.json({error: date.toString});
+  
+  if(date.toUTCString() === "Invalid Date") {
+    res.json({error: date.toUTCString()});
   } else {
     res.json({unix: unixData, utc: date.toUTCString()})
   }
-
 });
+
+app.get('/api/', (req,res) => {
+  let date = new Date();
+  res.json({ unix: date.valueOf(), utc: date.toUTCString() })
+}); 
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
